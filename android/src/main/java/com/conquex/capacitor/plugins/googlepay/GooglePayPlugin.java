@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import androidx.annotation.NonNull;
 
-@NativePlugin(requestCodes={GooglePay.LOAD_PAYMENT_DATA_REQUEST_CODE})
+@NativePlugin(requestCodes={GooglePayPlugin.LOAD_PAYMENT_DATA_REQUEST_CODE})
 public class GooglePayPlugin extends Plugin {
     public void load() {
         paymentsClient = PaymentsUtil.createPaymentsClient(getActivity());
