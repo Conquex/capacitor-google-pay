@@ -21,7 +21,7 @@ public class PaymentsUtil {
 
   public static PaymentsClient createPaymentsClient(Activity activity) {
     Wallet.WalletOptions walletOptions =
-        new Wallet.WalletOptions.Builder().setEnvironment(101/*TODO change to be some constant*/).build();
+        new Wallet.WalletOptions.Builder().setEnvironment(WalletConstants.ENVIRONMENT_TEST).build();
     return Wallet.getPaymentsClient(activity, walletOptions);
   }
 
