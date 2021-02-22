@@ -44,7 +44,7 @@ public class PaymentsUtil {
 
   private static JSONObject getGatewayTokenizationSpecification() throws JSONException {
     return new JSONObject() {{
-      put("type", WalletConstants.PAYMENT_METHOD_TOKENIZATION_TYPE_PAYMENT_GATEWAY);
+      put("type", "PAYMENT_GATEWAY");
       put("parameters", new JSONObject() {{
         put("gateway", "checkoutltd");
         put("gatewayMerchantId", "pk_test_38e59da4-9a33-4072-8b8d-da0f9050404f");
@@ -60,10 +60,9 @@ public class PaymentsUtil {
   }
 
   private static JSONArray getAllowedCardNetworks() {
-    return new JSONArray(
-            Arrays.asList(
-                    WalletConstants.CARD_NETWORK_VISA,
-                    WalletConstants.CARD_NETWORK_MASTERCARD));
+    return new JSONArray()
+            .put("MASTERCARD")
+            .put("VISA");
   }
 
   private static JSONArray getAllowedCardAuthMethods() {
@@ -78,7 +77,9 @@ public class PaymentsUtil {
 
   private static JSONObject getTransactionInfo(String price) throws JSONException {
     JSONObject transactionInfo = new JSONObject();
-    transactionInfo.put("totalPrice", price);
+    // transactionInfo.put("totalPrice", price);
+    
+    transactionInfo.put("totalPrice", "0.01");
     transactionInfo.put("totalPriceStatus", "FINAL");
     transactionInfo.put("countryCode", "GB");
     transactionInfo.put("currencyCode", "GBP");
