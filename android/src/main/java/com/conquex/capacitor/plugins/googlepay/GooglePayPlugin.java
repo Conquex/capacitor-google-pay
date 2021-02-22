@@ -9,6 +9,7 @@ import com.getcapacitor.PluginMethod;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,6 +58,7 @@ public class GooglePayPlugin extends Plugin {
                             res.put("available", true);
                             call.resolve(res);
                         } else {
+                            Log.i("KODYPAY_ERROR", task.getException().getMessage());
                             res.put("available", false);
                             call.resolve(res);
                         }
