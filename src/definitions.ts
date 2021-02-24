@@ -5,7 +5,7 @@ declare module '@capacitor/core' {
 }
 
 export interface GooglePayPluginPlugin {
-  isPaymentAvailable(): Promise<{ available: boolean }>;
-  hasPaymentsSetup(): Promise<{ available: boolean }>;
+  available(): Promise<{ available: boolean }>;
+  paymentConfigured(): Promise<{ available: boolean }>;
   requestPayment(): Promise<any>;
 }

@@ -9,7 +9,7 @@ export class GooglePayPluginWeb extends WebPlugin implements GooglePayPluginPlug
     });
   }
 
-  async isPaymentAvailable(): Promise<{ available: boolean }> {
+  async available(): Promise<{ available: boolean }> {
     return new Promise(() => {});
   }
 
@@ -17,7 +17,7 @@ export class GooglePayPluginWeb extends WebPlugin implements GooglePayPluginPlug
     return new Promise(() => {});
   }
   
-  async hasPaymentsSetup(): Promise<any> {
+  async paymentConfigured(): Promise<any> {
     return new Promise(() => {});
   }
 }

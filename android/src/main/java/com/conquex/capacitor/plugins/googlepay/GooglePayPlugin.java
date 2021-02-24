@@ -39,12 +39,12 @@ public class GooglePayPlugin extends Plugin {
     private PaymentsClient paymentsClient;
 
     @PluginMethod
-    public void isPaymentAvailable(final PluginCall call) {
+    public void available(final PluginCall call) {
         this.isReadyToPay(call, false);
     }
 
     @PluginMethod
-    public void hasPaymentsSetup(final PluginCall call) {
+    public void paymentConfigured(final PluginCall call) {
         this.isReadyToPay(call, true);
     }
 
