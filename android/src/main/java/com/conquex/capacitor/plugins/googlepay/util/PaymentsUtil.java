@@ -78,13 +78,17 @@ public class PaymentsUtil {
     return new JSONArray(Arrays.asList("GB"));
   }
 
-  private static JSONObject getTransactionInfo(String price) throws JSONException {
+  private static JSONObject getTransactionInfo(String price, boolean forSetup) throws JSONException {
     JSONObject transactionInfo = new JSONObject();
-    transactionInfo.put("totalPrice", price);
-    transactionInfo.put("totalPriceStatus", "FINAL");
+    if (forSetup) {
+      transactionInfo.put("totalPriceStatus", "NOT_CURRENTLY_KNOWN");
+    } else {
+      transactionInfo.put("totalPrice", price);
+      transactionInfo.put("totalPriceStatus", "FINAL");
+      transactionInfo.put("checkoutOption", "COMPLETE_IMMEDIATE_PURCHASE");
+    }
     transactionInfo.put("countryCode", "GB");
     transactionInfo.put("currencyCode", "GBP");
-    transactionInfo.put("checkoutOption", "COMPLETE_IMMEDIATE_PURCHASE");
 
     return transactionInfo;
   }
@@ -93,26 +97,28 @@ public class PaymentsUtil {
     return new JSONObject().put("merchantName", "Example Merchant");
   }
 
-  public static Optional<JSONObject> getPaymentDataRequest(final String price) {
+  public static Optional<JSONObject> getPaymentDataRequest(final String price, boolean forSetup) {
 
     try {
       JSONObject paymentDataRequest = PaymentsUtil.getBaseRequest();
       paymentDataRequest.put(
               "allowedPaymentMethods", new JSONArray().put(PaymentsUtil.getCardPaymentMethod()));
-      paymentDataRequest.put("transactionInfo", PaymentsUtil.getTransactionInfo(price));
-      paymentDataRequest.put("merchantInfo", PaymentsUtil.getMerchantInfo());
-
+      paymentDataRequest.put("transactionInfo", PaymentsUtil.getTransactionInfo(price, forSetup));
+      if (!forSetup) {
+        paymentDataRequest.put("merchantInfo", PaymentsUtil.getMerchantInfo());
       /* An optional shipping address requirement is a top-level property of the PaymentDataRequest
       JSON object. */
-      paymentDataRequest.put("shippingAddressRequired", true);
+        paymentDataRequest.put("shippingAddressRequired", true);
 
-      JSONObject shippingAddressParameters = new JSONObject();
-      shippingAddressParameters.put("phoneNumberRequired", false);
+        JSONObject shippingAddressParameters = new JSONObject();
+        shippingAddressParameters.put("phoneNumberRequired", false);
 
-      JSONArray allowedCountryCodes = new JSONArray(PaymentsUtil.getAllowedCountryCodes());
+        JSONArray allowedCountryCodes = new JSONArray(PaymentsUtil.getAllowedCountryCodes());
 
-      shippingAddressParameters.put("allowedCountryCodes", allowedCountryCodes);
-      paymentDataRequest.put("shippingAddressParameters", shippingAddressParameters);
+        shippingAddressParameters.put("allowedCountryCodes", allowedCountryCodes);
+        paymentDataRequest.put("shippingAddressParameters", shippingAddressParameters);
+      }
+
       return Optional.of(paymentDataRequest);
 
     } catch (JSONException e) {

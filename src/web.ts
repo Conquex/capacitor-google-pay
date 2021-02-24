@@ -12,12 +12,16 @@ export class GooglePayPluginWeb extends WebPlugin implements GooglePayPluginPlug
   async available(): Promise<{ available: boolean }> {
     return new Promise(() => {});
   }
+  
+  async paymentConfigured(): Promise<any> {
+    return new Promise(() => {});
+  }
 
   async requestPayment(): Promise<any> {
     return new Promise(() => {});
   }
-  
-  async paymentConfigured(): Promise<any> {
+
+  async configurePayment(): Promise<any> {
     return new Promise(() => {});
   }
 }
