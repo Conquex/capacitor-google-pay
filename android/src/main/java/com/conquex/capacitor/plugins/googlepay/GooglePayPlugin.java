@@ -40,7 +40,37 @@ public class GooglePayPlugin extends Plugin {
 
     @PluginMethod
     public void isPaymentAvailable(final PluginCall call) {
-        final Optional<JSONObject> isReadyToPayJson = PaymentsUtil.getIsReadyToPayRequest();
+        this.isReadyToPay(call, false);
+    }
+
+    @PluginMethod
+    public void hasPaymentsSetup(final PluginCall call) {
+        this.isReadyToPay(call, true);
+    }
+
+    @PluginMethod
+    public void requestPayment(PluginCall call) {
+        Optional<JSONObject> paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(call.getString("price"));
+        if (!paymentDataRequestJson.isPresent()) {
+            call.reject("Unavailable");
+            return;
+        }
+
+        PaymentDataRequest request =
+                PaymentDataRequest.fromJson(paymentDataRequestJson.get().toString());
+
+        if (request != null) {
+            saveCall(call);
+            AutoResolveHelper.resolveTask(
+                    paymentsClient.loadPaymentData(request),
+                    getActivity(), LOAD_PAYMENT_DATA_REQUEST_CODE);
+        } else {
+            call.resolve();
+        }
+    }
+
+    private void isReadyToPay(final PluginCall call, boolean existingPaymentMethodRequired) {
+        final Optional<JSONObject> isReadyToPayJson = PaymentsUtil.getIsReadyToPayRequest(existingPaymentMethodRequired);
         final JSObject res = new JSObject();
         if (!isReadyToPayJson.isPresent()) {
             res.put("available", false);
@@ -58,33 +88,12 @@ public class GooglePayPlugin extends Plugin {
                             res.put("available", true);
                             call.resolve(res);
                         } else {
-                            Log.i("KODYPAY_ERROR", task.getException().getMessage());
+                            res.put("error", task.getException().getMessage());
                             res.put("available", false);
                             call.resolve(res);
                         }
                     }
                 });
-    }
-
-    @PluginMethod
-    public void requestPayment(PluginCall call) {
-        Optional<JSONObject> paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(2000);
-        if (!paymentDataRequestJson.isPresent()) {
-            call.reject("Unavailable");
-            return;
-        }
-
-        PaymentDataRequest request =
-                PaymentDataRequest.fromJson(paymentDataRequestJson.get().toString());
-
-        if (request != null) {
-            saveCall(call);
-            AutoResolveHelper.resolveTask(
-                    paymentsClient.loadPaymentData(request),
-                    getActivity(), LOAD_PAYMENT_DATA_REQUEST_CODE);
-        } else {
-            call.resolve();
-        }
     }
 
     @Override

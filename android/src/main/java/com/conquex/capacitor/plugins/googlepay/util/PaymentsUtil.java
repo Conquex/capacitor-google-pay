@@ -25,11 +25,14 @@ public class PaymentsUtil {
     return Wallet.getPaymentsClient(activity, walletOptions);
   }
 
-  public static Optional<JSONObject> getIsReadyToPayRequest() {
+  public static Optional<JSONObject> getIsReadyToPayRequest(boolean existingPaymentMethodRequired) {
     try {
       JSONObject isReadyToPayRequest = getBaseRequest();
       isReadyToPayRequest.put(
               "allowedPaymentMethods", new JSONArray().put(getBaseCardPaymentMethod()));
+      if (existingPaymentMethodRequired) {
+        isReadyToPayRequest.put("existingPaymentMethodRequired", true);
+      }
 
       return Optional.of(isReadyToPayRequest);
 
@@ -77,9 +80,7 @@ public class PaymentsUtil {
 
   private static JSONObject getTransactionInfo(String price) throws JSONException {
     JSONObject transactionInfo = new JSONObject();
-    // transactionInfo.put("totalPrice", price);
-    
-    transactionInfo.put("totalPrice", "0.01");
+    transactionInfo.put("totalPrice", price);
     transactionInfo.put("totalPriceStatus", "FINAL");
     transactionInfo.put("countryCode", "GB");
     transactionInfo.put("currencyCode", "GBP");
@@ -89,13 +90,10 @@ public class PaymentsUtil {
   }
 
   private static JSONObject getMerchantInfo() throws JSONException {
-    // TODO set merchant Name
     return new JSONObject().put("merchantName", "Example Merchant");
   }
 
-  public static Optional<JSONObject> getPaymentDataRequest(long priceCents) {
-
-    final String price = PaymentsUtil.centsToString(priceCents);
+  public static Optional<JSONObject> getPaymentDataRequest(final String price) {
 
     try {
       JSONObject paymentDataRequest = PaymentsUtil.getBaseRequest();

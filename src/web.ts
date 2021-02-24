@@ -16,6 +16,10 @@ export class GooglePayPluginWeb extends WebPlugin implements GooglePayPluginPlug
   async requestPayment(): Promise<any> {
     return new Promise(() => {});
   }
+  
+  async hasPaymentsSetup(): Promise<any> {
+    return new Promise(() => {});
+  }
 }
 
 const GooglePayPlugin = new GooglePayPluginWeb();
