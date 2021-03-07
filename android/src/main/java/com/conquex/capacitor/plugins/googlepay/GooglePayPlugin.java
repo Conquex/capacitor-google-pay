@@ -59,7 +59,7 @@ public class GooglePayPlugin extends Plugin {
     }
 
     private void paymentRequest(final PluginCall call, String price, boolean forSetup) {
-        Optional<JSONObject> paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(price, forSetup);
+        Optional<JSONObject> paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(price, call.getString("merchantName"), forSetup);
         if (!paymentDataRequestJson.isPresent()) {
             call.reject("Unavailable");
             return;

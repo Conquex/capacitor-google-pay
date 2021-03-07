@@ -93,11 +93,11 @@ public class PaymentsUtil {
     return transactionInfo;
   }
 
-  private static JSONObject getMerchantInfo() throws JSONException {
-    return new JSONObject().put("merchantName", "Example Merchant");
+  private static JSONObject getMerchantInfo(String merchantName) throws JSONException {
+    return new JSONObject().put("merchantName", merchantName);
   }
 
-  public static Optional<JSONObject> getPaymentDataRequest(final String price, boolean forSetup) {
+  public static Optional<JSONObject> getPaymentDataRequest(final String price, final String merchantName, boolean forSetup) {
 
     try {
       JSONObject paymentDataRequest = PaymentsUtil.getBaseRequest();
@@ -105,7 +105,7 @@ public class PaymentsUtil {
               "allowedPaymentMethods", new JSONArray().put(PaymentsUtil.getCardPaymentMethod()));
       paymentDataRequest.put("transactionInfo", PaymentsUtil.getTransactionInfo(price, forSetup));
       if (!forSetup) {
-        paymentDataRequest.put("merchantInfo", PaymentsUtil.getMerchantInfo());
+        paymentDataRequest.put("merchantInfo", PaymentsUtil.getMerchantInfo(merchantName));
       /* An optional shipping address requirement is a top-level property of the PaymentDataRequest
       JSON object. */
         paymentDataRequest.put("shippingAddressRequired", true);
