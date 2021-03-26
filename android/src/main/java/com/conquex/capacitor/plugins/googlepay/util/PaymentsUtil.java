@@ -75,7 +75,8 @@ public class PaymentsUtil {
   }
 
   private static JSONArray getAllowedCountryCodes() {
-    return new JSONArray(Arrays.asList("GB"));
+    return new JSONArray()
+            .put("GB");
   }
 
   private static JSONObject getTransactionInfo(String price, boolean forSetup) throws JSONException {
@@ -113,7 +114,7 @@ public class PaymentsUtil {
         JSONObject shippingAddressParameters = new JSONObject();
         shippingAddressParameters.put("phoneNumberRequired", false);
 
-        JSONArray allowedCountryCodes = new JSONArray(PaymentsUtil.getAllowedCountryCodes());
+        JSONArray allowedCountryCodes = PaymentsUtil.getAllowedCountryCodes();
 
         shippingAddressParameters.put("allowedCountryCodes", allowedCountryCodes);
         paymentDataRequest.put("shippingAddressParameters", shippingAddressParameters);
