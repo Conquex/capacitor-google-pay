@@ -9,15 +9,15 @@ import Capacitor
 public class GooglePayPlugin: CAPPlugin {
 
     @objc func available(_ call: CAPPluginCall) {
-        call.success("no ios implementation for GooglePayPlugin")
+        call.success(["available": false])
     }
     @objc func paymentConfigured(_ call: CAPPluginCall) {
-        call.success("no ios implementation for GooglePayPlugin")
+        call.success(["available": false])
     }
     @objc func requestPayment(_ call: CAPPluginCall) {
-        call.success("no ios implementation for GooglePayPlugin")
+        call.error("GooglePayPlugin not available for ios")
     }
     @objc func configurePayment(_ call: CAPPluginCall) {
-        call.success("no ios implementation for GooglePayPlugin")
+        call.error("GooglePayPlugin not available for ios")
     }
 }
