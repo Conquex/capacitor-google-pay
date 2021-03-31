@@ -8,10 +8,16 @@ import Capacitor
 @objc(GooglePayPlugin)
 public class GooglePayPlugin: CAPPlugin {
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.success([
-            "value": value
-        ])
+    @objc func available(_ call: CAPPluginCall) {
+        call.success("no ios implementation for GooglePayPlugin")
+    }
+    @objc func paymentConfigured(_ call: CAPPluginCall) {
+        call.success("no ios implementation for GooglePayPlugin")
+    }
+    @objc func requestPayment(_ call: CAPPluginCall) {
+        call.success("no ios implementation for GooglePayPlugin")
+    }
+    @objc func configurePayment(_ call: CAPPluginCall) {
+        call.success("no ios implementation for GooglePayPlugin")
     }
 }
