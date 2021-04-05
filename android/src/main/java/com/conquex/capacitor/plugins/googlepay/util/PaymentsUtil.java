@@ -109,6 +109,7 @@ public class PaymentsUtil {
         paymentDataRequest.put("merchantInfo", PaymentsUtil.getMerchantInfo(merchantName));
       /* An optional shipping address requirement is a top-level property of the PaymentDataRequest
       JSON object. */
+        /*
         paymentDataRequest.put("shippingAddressRequired", true);
 
         JSONObject shippingAddressParameters = new JSONObject();
@@ -118,6 +119,7 @@ public class PaymentsUtil {
 
         shippingAddressParameters.put("allowedCountryCodes", allowedCountryCodes);
         paymentDataRequest.put("shippingAddressParameters", shippingAddressParameters);
+        */
       }
 
       return Optional.of(paymentDataRequest);
