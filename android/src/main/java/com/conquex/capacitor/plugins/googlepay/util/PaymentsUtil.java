@@ -2,6 +2,7 @@ package com.conquex.capacitor.plugins.googlepay.util;
 
 import android.app.Activity;
 
+import com.getcapacitor.PluginCall;
 import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.Wallet;
 import com.google.android.gms.wallet.WalletConstants;
@@ -45,19 +46,21 @@ public class PaymentsUtil {
     return new JSONObject().put("apiVersion", 2).put("apiVersionMinor", 0);
   }
 
-  private static JSONObject getGatewayTokenizationSpecification() throws JSONException {
+  private static JSONObject getGatewayTokenizationSpecification(PluginCall call) throws JSONException {
+    final String gateway = call.getString("gateway");
+    final String gatewayMerchantId = call.getString("gatewayMerchantId");
     return new JSONObject() {{
       put("type", "PAYMENT_GATEWAY");
       put("parameters", new JSONObject() {{
-        put("gateway", "checkoutltd");
-        put("gatewayMerchantId", "pk_test_38e59da4-9a33-4072-8b8d-da0f9050404f");
+        put("gateway", gateway);
+        put("gatewayMerchantId", gatewayMerchantId);
       }});
     }};
   }
 
-  private static JSONObject getCardPaymentMethod() throws JSONException {
+  private static JSONObject getCardPaymentMethod(PluginCall call) throws JSONException {
     JSONObject cardPaymentMethod = getBaseCardPaymentMethod();
-    cardPaymentMethod.put("tokenizationSpecification", getGatewayTokenizationSpecification());
+    cardPaymentMethod.put("tokenizationSpecification", getGatewayTokenizationSpecification(call));
 
     return cardPaymentMethod;
   }
@@ -98,12 +101,14 @@ public class PaymentsUtil {
     return new JSONObject().put("merchantName", merchantName);
   }
 
-  public static Optional<JSONObject> getPaymentDataRequest(final String price, final String merchantName, boolean forSetup) {
+  public static Optional<JSONObject> getPaymentDataRequest(PluginCall call, boolean forSetup) {
 
     try {
+      String price = call.getString("price");
+      String merchantName = call.getString("merchantName");
       JSONObject paymentDataRequest = PaymentsUtil.getBaseRequest();
       paymentDataRequest.put(
-              "allowedPaymentMethods", new JSONArray().put(PaymentsUtil.getCardPaymentMethod()));
+              "allowedPaymentMethods", new JSONArray().put(PaymentsUtil.getCardPaymentMethod(call)));
       paymentDataRequest.put("transactionInfo", PaymentsUtil.getTransactionInfo(price, forSetup));
       if (!forSetup) {
         paymentDataRequest.put("merchantInfo", PaymentsUtil.getMerchantInfo(merchantName));

@@ -50,16 +50,16 @@ public class GooglePayPlugin extends Plugin {
 
     @PluginMethod
     public void requestPayment(PluginCall call) {
-        this.paymentRequest(call, call.getString("price"), false);
+        this.paymentRequest(call, false);
     }
 
     @PluginMethod
     public void configurePayment(PluginCall call) {
-        this.paymentRequest(call, "", true);
+        this.paymentRequest(call, true);
     }
 
-    private void paymentRequest(final PluginCall call, String price, boolean forSetup) {
-        Optional<JSONObject> paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(price, call.getString("merchantName"), forSetup);
+    private void paymentRequest(final PluginCall call, boolean forSetup) {
+        Optional<JSONObject> paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(call, forSetup);
         if (!paymentDataRequestJson.isPresent()) {
             call.reject("Unavailable");
             return;
